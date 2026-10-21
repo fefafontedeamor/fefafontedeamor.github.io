@@ -5,6 +5,7 @@ const ESCALAS = [1, 1.15, 1.3, 1.5];
 const $ = (id) => document.getElementById(id);
 
 let oracoes = [];
+let buscaAproximada = null;
 let rolagemDaLista = 0;
 let veioDaLista = false;
 
@@ -68,7 +69,7 @@ function paraOracoes(linhas) {
       let slug = base;
       for (let n = 2; usados.has(slug); n++) slug = `${base}-${n}`;
       usados.add(slug);
-      return { ...o, slug, busca: normalizar(`${o.titulo} ${o.texto}`) };
+      return { ...o, slug, tituloBusca: normalizar(o.titulo), busca: normalizar(`${o.titulo} ${o.texto}`) };
     });
 }
 
@@ -106,10 +107,37 @@ function criarCartao(oracao) {
   return item;
 }
 
+// Typo-tolerant fallback; null when the Fuse.js script failed to load.
+function criarBuscaAproximada(lista) {
+  if (!window.Fuse) return null;
+  return new Fuse(lista, {
+    keys: [{ name: "tituloBusca", weight: 2 }, { name: "busca", weight: 1 }],
+    useExtendedSearch: true,
+    ignoreLocation: true,
+    ignoreFieldNorm: true,
+    threshold: 0.4,
+    includeScore: true,
+  });
+}
+
+// Exact matches win; fuzzy results only appear when no prayer contains every word.
+function buscar(palavras) {
+  const exatas = oracoes.filter((o) => palavras.every((p) => o.busca.includes(p)));
+  if (exatas.length || !palavras.length || !buscaAproximada) return { encontradas: exatas, aproximadas: false };
+
+  // In extended search a space means AND, and symbols are operators, so they are stripped.
+  const consulta = palavras.join(" ").replace(/[^a-z0-9]+/g, " ").trim();
+  const encontradas = buscaAproximada
+    .search(consulta)
+    .filter((r) => r.score <= 0.2)
+    .map((r) => r.item);
+  return { encontradas, aproximadas: true };
+}
+
 function renderizarLista() {
   const consulta = $("busca").value;
   const palavras = normalizar(consulta).split(/\s+/).filter(Boolean);
-  const encontradas = oracoes.filter((o) => palavras.every((p) => o.busca.includes(p)));
+  const { encontradas, aproximadas } = buscar(palavras);
 
   $("limpar").hidden = !consulta;
   $("resultados").replaceChildren(...encontradas.map(criarCartao));
@@ -117,6 +145,7 @@ function renderizarLista() {
   const status = $("status");
   if (!oracoes.length) status.textContent = "Ainda não há orações publicadas.";
   else if (!encontradas.length) status.textContent = `Nenhuma oração encontrada para “${consulta.trim()}”.`;
+  else if (aproximadas) status.textContent = `Nenhuma oração tem exatamente “${consulta.trim()}”. Veja as mais parecidas:`;
   else if (palavras.length) status.textContent = encontradas.length === 1 ? "1 oração encontrada." : `${encontradas.length} orações encontradas.`;
   else status.textContent = "";
 }
@@ -195,6 +224,7 @@ async function iniciar() {
   configurar();
   try {
     oracoes = paraOracoes(parseCsv(await carregar()));
+    buscaAproximada = criarBuscaAproximada(oracoes);
   } catch {
     $("status").textContent = "Não foi possível carregar as orações. Verifique a internet e tente novamente.";
     return;
