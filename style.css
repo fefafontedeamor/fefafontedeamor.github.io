@@ -1,0 +1,232 @@
+:root {
+  --fundo: #faf6ef;
+  --superficie: #ffffff;
+  --texto: #2a2118;
+  --suave: #5a4d40;
+  --borda: #d6c9b8;
+  --destaque: #7a3b12;
+  --destaque-texto: #ffffff;
+  --foco: #1f5fbf;
+  --escala: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #1c1814;
+    --superficie: #27211b;
+    --texto: #f3ece2;
+    --suave: #cdc1b2;
+    --borda: #4b4137;
+    --destaque: #f0b37e;
+    --destaque-texto: #1c1814;
+    --foco: #8ab4ff;
+  }
+}
+
+/* 137.5% = 22px at the browser default, while still honouring the phone's own text size. */
+html {
+  font-size: calc(137.5% * var(--escala));
+  -webkit-text-size-adjust: 100%;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.largura {
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+main { padding-bottom: 3rem; }
+
+:focus-visible {
+  outline: 4px solid var(--foco);
+  outline-offset: 3px;
+}
+
+button, input { font: inherit; color: inherit; }
+
+button { cursor: pointer; }
+
+/* Header */
+
+.topo {
+  border-bottom: 2px solid var(--borda);
+  background: var(--superficie);
+}
+
+.topo-conteudo {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 0.5rem;
+  min-height: 3.5rem;
+}
+
+.marca {
+  padding: 0.4rem 0;
+  font-family: "Literata", Georgia, serif;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--destaque);
+  text-decoration: none;
+}
+
+.marca span { display: block; white-space: nowrap; }
+
+.marca-pre {
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.marca-nome { font-size: 1.05rem; }
+
+.tamanho { display: flex; gap: 0.5rem; }
+
+.tamanho button {
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  border: 2px solid var(--borda);
+  border-radius: 0.5rem;
+  background: var(--fundo);
+  font-weight: 700;
+}
+
+.tamanho button:disabled { opacity: 0.4; cursor: default; }
+
+/* List */
+
+h1 {
+  font-family: "Literata", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  margin: 1.5rem 0 1rem;
+}
+
+.rotulo {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.busca { display: flex; gap: 0.5rem; }
+
+.busca input {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.6rem;
+  padding: 0.4rem 0.75rem;
+  border: 2px solid var(--suave);
+  border-radius: 0.6rem;
+  background: var(--superficie);
+}
+
+.busca input::placeholder { color: var(--suave); opacity: 1; }
+
+.busca button {
+  padding: 0 0.9rem;
+  border: 2px solid var(--borda);
+  border-radius: 0.6rem;
+  background: var(--superficie);
+}
+
+.status {
+  color: var(--suave);
+  margin: 1rem 0;
+}
+
+.cartoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cartao {
+  display: block;
+  padding: 0.9rem 1rem;
+  border: 2px solid var(--borda);
+  border-radius: 0.75rem;
+  background: var(--superficie);
+  color: inherit;
+  text-decoration: none;
+}
+
+.cartao:hover { border-color: var(--destaque); }
+
+.cartao-titulo {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--destaque);
+}
+
+.cartao-inicio {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--suave);
+}
+
+.enviar {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1rem;
+  border-top: 2px solid var(--borda);
+  text-align: center;
+}
+
+.enviar p { margin: 0 0 0.75rem; }
+
+.enviar .nota {
+  margin: 0.75rem 0 0;
+  color: var(--suave);
+  font-size: 0.9rem;
+}
+
+.botao {
+  display: inline-block;
+  min-height: 2.6rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: var(--destaque);
+  color: var(--destaque-texto);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Single prayer */
+
+.voltar {
+  margin-top: 1.25rem;
+  min-height: 2.6rem;
+  padding: 0.3rem 0.9rem;
+  border: 2px solid var(--borda);
+  border-radius: 0.6rem;
+  background: var(--superficie);
+  font-weight: 700;
+}
+
+#oracao-titulo:focus { outline: none; }
+
+.texto {
+  font-family: "Literata", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+}
+
+.acoes { margin-top: 2rem; }

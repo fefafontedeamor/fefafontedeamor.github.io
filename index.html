@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orações · Fraternidade Espírita Fonte de Amor</title>
+  <meta name="description" content="Orações da Fraternidade Espírita Fonte de Amor.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topo">
+    <div class="largura topo-conteudo">
+      <a class="marca" href="#/"><span class="marca-pre">Fraternidade Espírita</span> <span class="marca-nome">Fonte de Amor</span></a>
+      <div class="tamanho" role="group" aria-label="Tamanho da letra">
+        <button type="button" id="menor" aria-label="Diminuir a letra">A−</button>
+        <button type="button" id="maior" aria-label="Aumentar a letra">A+</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="largura">
+    <section id="lista">
+      <h1>Orações</h1>
+
+      <label for="busca" class="rotulo">Procurar uma oração</label>
+      <div class="busca">
+        <input id="busca" type="search" placeholder="Digite uma palavra" autocomplete="off" enterkeyhint="search">
+        <button type="button" id="limpar" hidden>Limpar</button>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite">Carregando as orações…</p>
+      <ul id="resultados" class="cartoes"></ul>
+
+      <aside id="enviar-caixa" class="enviar" hidden>
+        <p>Quer compartilhar uma oração com a casa?</p>
+        <a id="enviar" class="botao" target="_blank" rel="noopener">Enviar uma oração</a>
+        <p class="nota">Ela aparecerá aqui depois de aprovada.</p>
+      </aside>
+    </section>
+
+    <article id="oracao" hidden>
+      <button type="button" id="voltar" class="voltar">← Voltar para as orações</button>
+      <h1 id="oracao-titulo" tabindex="-1"></h1>
+      <div id="oracao-texto" class="texto"></div>
+      <div class="acoes">
+        <button type="button" id="compartilhar" class="botao" hidden>Compartilhar</button>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
