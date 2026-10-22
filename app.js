@@ -7,7 +7,6 @@ const $ = (id) => document.getElementById(id);
 let oracoes = [];
 let buscaAproximada = null;
 let rolagemDaLista = 0;
-let veioDaLista = false;
 
 function lerArmazenado(chave) {
   try { return localStorage.getItem(chave); } catch { return null; }
@@ -162,10 +161,7 @@ function mostrarRota() {
     return;
   }
 
-  if (!$("lista").hidden) {
-    rolagemDaLista = window.scrollY;
-    veioDaLista = true;
-  }
+  if (!$("lista").hidden) rolagemDaLista = window.scrollY;
   $("lista").hidden = true;
   $("oracao").hidden = false;
   $("oracao-titulo").textContent = oracao.titulo;
@@ -190,7 +186,17 @@ function configurarEscala() {
   $("maior").addEventListener("click", () => aplicarEscala((indice = Math.min(ESCALAS.length - 1, indice + 1))));
 }
 
+// A prayer opened directly gets the list inserted beneath it in history, so going back
+// lands on the list instead of leaving the site. The state marker avoids re-inserting on reload.
+function garantirListaNoHistorico() {
+  if (!location.hash.replace(/^#\/?/, "") || history.state?.listaInserida) return;
+  const rota = location.hash;
+  history.replaceState(null, "", location.pathname + location.search);
+  history.pushState({ listaInserida: true }, "", rota);
+}
+
 function configurar() {
+  garantirListaNoHistorico();
   configurarEscala();
 
   if (window.CONFIG.formUrl) {
@@ -205,10 +211,7 @@ function configurar() {
     $("busca").focus();
   });
 
-  $("voltar").addEventListener("click", () => {
-    if (veioDaLista) history.back();
-    else location.hash = "";
-  });
+  $("voltar").addEventListener("click", () => history.back());
 
   if (navigator.share) {
     $("compartilhar").hidden = false;
